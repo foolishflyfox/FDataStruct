@@ -1,5 +1,6 @@
 package com.bfh.profile;
 
+import lombok.EqualsAndHashCode;
 import org.junit.Test;
 import org.openjdk.jol.info.ClassLayout;
 
@@ -77,6 +78,47 @@ public class HashCodeTest {
             r = r * 31 + c;
         }
         return r;
+    }
+
+    @Test
+    public void testNumberHashCode() {
+        Integer i = 123;
+        Long j = 123L;
+        Boolean k = true;
+        Short l = 123;
+        Byte m = 123;
+        Character n = '{';
+        Float o = 123.0f;
+        Double p = 123.0;
+        System.out.println(i.hashCode());  // 123
+        System.out.println(j.hashCode());  // 123
+        System.out.println(k.hashCode());  // true = 1231, false = 1237
+        System.out.println(l.hashCode());  // 123
+        System.out.println(m.hashCode());  // 123
+        System.out.println(n.hashCode());  // 123
+        System.out.println(o.hashCode());  // 1123418112
+        System.out.println(p.hashCode());  // 1079951360
+    }
+
+    @EqualsAndHashCode
+    static class B {
+        int v1;
+        String v2;
+        double v3;
+        public B (int v1, String v2, double v3) {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+        }
+    }
+    @Test
+    public void testObjectHashCode () {
+        B b = new B(123, "abc", 123.0);
+        System.out.println(b.hashCode());
+        int r = Integer.hashCode(b.v1);
+        r = r * 31 + b.v2.hashCode();
+        r = r * 31 + Double.hashCode(b.v3);
+        System.out.println(r);
     }
 
 }
