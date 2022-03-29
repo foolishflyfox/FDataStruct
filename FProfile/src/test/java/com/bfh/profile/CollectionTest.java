@@ -13,7 +13,7 @@ public class CollectionTest {
         Collection<Integer> collection = new TreeSet<Integer>();
         System.out.println(collection.add(1));  // true
         System.out.println(collection.add(1));  // false
-        System.out.println(collection.add(null));  // throw NullPointerException
+        // System.out.println(collection.add(null));  // throw NullPointerException
     }
 
     @Test
