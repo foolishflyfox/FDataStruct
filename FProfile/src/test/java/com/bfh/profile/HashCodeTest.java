@@ -100,7 +100,7 @@ public class HashCodeTest {
         System.out.println(p.hashCode());  // 1079951360
     }
 
-    @EqualsAndHashCode
+    // @EqualsAndHashCode
     static class B {
         int v1;
         String v2;
@@ -119,6 +119,57 @@ public class HashCodeTest {
         r = r * 31 + b.v2.hashCode();
         r = r * 31 + Double.hashCode(b.v3);
         System.out.println(r);
+    }
+
+    @Test
+    public void testIdentityHashCode() {
+        B b = new B(234, "xxx", 345.6);
+
+        /**
+         * com.bfh.profile.HashCodeTest$B object internals:
+         *  OFFSET  SIZE               TYPE DESCRIPTION                               VALUE
+         *       0     4                    (object header)                           01 00 00 00 (00000001 00000000 00000000 00000000) (1)
+         *       4     4                    (object header)                           00 00 00 00 (00000000 00000000 00000000 00000000) (0)
+         *       8     4                    (object header)                           55 a7 01 f8 (01010101 10100111 00000001 11111000) (-134109355)
+         *      12     4                int B.v1                                      234
+         *      16     8             double B.v3                                      345.6
+         *      24     4   java.lang.String B.v2                                      (object)
+         *      28     4                    (loss due to the next object alignment)
+         * Instance size: 32 bytes
+         * Space losses: 0 bytes internal + 4 bytes external = 4 bytes total
+         */
+        System.out.println(ClassLayout.parseInstance(b).toPrintable());
+
+        System.out.println(Integer.toHexString(System.identityHashCode(b)));  // 5aa9e4eb
+        /**
+         * 调用 System.identityHashCode 会修改对象头中的哈希值
+         * com.bfh.profile.HashCodeTest$B object internals:
+         *  OFFSET  SIZE               TYPE DESCRIPTION                               VALUE
+         *       0     4                    (object header)                           01 eb e4 a9 (00000001 11101011 11100100 10101001) (-1444615423)
+         *       4     4                    (object header)                           5a 00 00 00 (01011010 00000000 00000000 00000000) (90)
+         *       8     4                    (object header)                           55 a7 01 f8 (01010101 10100111 00000001 11111000) (-134109355)
+         *      12     4                int B.v1                                      234
+         *      16     8             double B.v3                                      345.6
+         *      24     4   java.lang.String B.v2                                      (object)
+         *      28     4                    (loss due to the next object alignment)
+         * Instance size: 32 bytes
+         * Space losses: 0 bytes internal + 4 bytes external = 4 bytes total
+         */
+        System.out.println(ClassLayout.parseInstance(b).toPrintable());
+
+        b.v1 = 1;
+        /**
+         * 虽然修改了 b 中的内容，但是对象头中的 hashCode 值并没有改变
+         */
+        System.out.println(ClassLayout.parseInstance(b).toPrintable());
+
+        System.out.println(Integer.toHexString(System.identityHashCode(b)));  // 5aa9e4eb
+        System.out.println(Integer.toHexString(b.hashCode()));
+        /**
+         * 再次调用 identityHashCode 也不能改变对象头中的 hashCode 值
+         * Object 默认的 hashCode 函数表示的是一个对象的地址，因此不会因为对内容的改变而改变
+         */
+        System.out.println(ClassLayout.parseInstance(b).toPrintable());
     }
 
 }
