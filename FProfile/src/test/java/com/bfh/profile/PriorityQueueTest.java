@@ -28,8 +28,8 @@ public class PriorityQueueTest {
         heap.add(5);
         heap.add(10);
         heap.add(3);
-        while (!heap.isEmpty()) {
-            System.out.println(heap.remove());
-        }
+//        while (!heap.isEmpty()) {
+//            System.out.println(heap.remove());
+//        }
     }
 }

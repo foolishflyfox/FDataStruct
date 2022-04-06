@@ -104,4 +104,9 @@ public class CollectionTest {
         System.out.println(Arrays.toString(a3));  // [1] , a3 容量不足，重新创建新数组，原数组内容不变
         System.out.println(Arrays.toString(b3));  // [a, b, c]
     }
+
+    @Test
+    public void testSynchronizedList() {
+
+    }
 }

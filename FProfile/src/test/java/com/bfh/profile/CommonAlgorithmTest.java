@@ -77,7 +77,7 @@ public class CommonAlgorithmTest {
             }
         }
         swap(a, pivot, index-1);
-        quickSortHelper(a, start, index-1);
+        quickSortHelper(a, start, index-2);
         quickSortHelper(a, index, end);
     }
     @Test
@@ -120,4 +120,182 @@ public class CommonAlgorithmTest {
         mergeSort(a);
         System.out.println(Arrays.toString(a));
     }
+
+    void insertSort(int a[]) {
+        if (a == null || a.length < 2) {
+            return;
+        }
+        for (int i = 1; i < a.length; ++i) {
+            int k = a[i], j = i - 1;
+            while (j >= 0 && a[j] > k) {
+                a[j+1] = a[j];
+                --j;
+            }
+            a[j+1] = k;
+        }
+    }
+
+    @Test
+    public void testInsertSort() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        insertSort(a);
+        System.out.println(Arrays.toString(a));
+    }
+
+    int selectMinValueIndex(int a[], int start) {
+        if (start >= a.length) {
+            return -1;
+        }
+        int r = start;
+        for (int i = start+1; i < a.length; ++i) {
+            if (a[r] > a[i]) {
+                r = i;
+            }
+        }
+        return r;
+    }
+    void selectSort(int[] a) {
+        if (a == null || a.length < 2) {
+            return;
+        }
+        for (int i = 0; i < a.length; ++i) {
+            int index = selectMinValueIndex(a, i);
+            swap(a, i, index);
+        }
+    }
+    @Test
+    public void testSelectSort() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        selectSort(a);
+        System.out.println(Arrays.toString(a));
+    }
+
+    void bubbleSort(int[] a) {
+        System.out.println("bubbleSort:");
+        if (a == null || a.length < 2) {
+            return;
+        }
+        for (int i = a.length-1; i > 0; --i) {
+            for (int j = 0; j < i; ++j) {
+                if (a[j] > a[j+1]) {
+                    swap(a, j, j+1);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testBubbleSort() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        bubbleSort(a);
+        System.out.println(Arrays.toString(a));
+    }
+
+    public void shellSort(int[] a) {
+        if (a == null || a.length < 2) {
+            return;
+        }
+         int len = a.length;
+        for (int step = len/2; step > 0; --step) {
+            // 一次插入排序
+            for (int i = step; i < len; ++i) {
+                int k = a[i];
+                int j = i - step;
+                for (; j >= 0; j -= step) {
+                    if (a[j] > k) {
+                        a[j + step] = a[j];
+                    } else {
+                        break;
+                    }
+                }
+                a[j + step] = k;
+            }
+        }
+    }
+
+    @Test
+    public void testShellSort() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        shellSort(a);
+        System.out.println(Arrays.toString(a));
+    }
+
+    Random random = new Random();
+    public void quickSort2(int[] a) {
+        if (null == a || a.length < 2) {
+            return;
+        }
+        quickSortHelper(a, 0, a.length-1);
+    }
+    private void quickSort2Helper(int[] a, int begin, int end) {
+        if (begin >= end) {
+            return;
+        }
+        swap(a, begin, random.nextInt(end - begin + 1) + begin);
+        int k = a[begin];
+        int left = begin, right = end;
+        while (left < right) {
+            while (left < right && a[right] >= k) {
+                right--;
+            }
+            if (left < right) {
+                swap(a, left, right);
+                right--;
+            }
+            while (left < right && a[left] < k) {
+                left++;
+            }
+            if (left < right) {
+                swap(a, left, right);
+                ++left;
+            }
+        }
+        a[left] = k;
+        quickSortHelper(a, begin, left-1);
+        quickSortHelper(a, left+1, end);
+
+    }
+
+    @Test
+    public void testQuickSort2() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        quickSort2(a);
+        System.out.println(Arrays.toString(a));
+    }
+
+    public void quickSort3(int[] a) {
+        if (a==null || a.length < 2) {
+            return;
+        }
+        quickSort3Helper(a, 0, a.length-1);
+    }
+
+    public void quickSort3Helper(int[] a, int begin, int end) {
+        if (begin >= end) {
+            return;
+        }
+        swap(a, begin, random.nextInt(end-begin+1)+begin);
+        int k = a[begin];
+        int bigKIndex = begin+1;
+        while (bigKIndex <= end && a[bigKIndex] <= k) {
+            ++bigKIndex;
+        }
+        for (int i = bigKIndex + 1; i <= end; ++i) {
+            if (a[i] > k) {
+                continue;
+            }
+            swap(a, bigKIndex++, i);
+        }
+        swap(a, begin, bigKIndex-1);
+        quickSort3Helper(a, begin, bigKIndex-2);
+        quickSort3Helper(a, bigKIndex, end);
+    }
+
+    @Test
+    public void testQuickSort3() {
+        int[] a = new int[]{3,1,6,5,2,3,7,1,8,4,9};
+        quickSort3(a);
+        System.out.println(Arrays.toString(a));
+    }
+
 }
